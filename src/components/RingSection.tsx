@@ -90,18 +90,18 @@ export default function RingSection() {
 
       <div className="variants">
         <figure>
-          <RingFlat chord={chord} size={160} />
-          <figcaption>FLAT</figcaption>
+          <RingFlat chord={chord} size={120} />
+          <figcaption><b>FLAT</b>For PDF sheets, and the fallback when WebGL is off.</figcaption>
         </figure>
         <figure>
           <RingFlat chord={chord} size={88} />
-          <figcaption>MINI</figcaption>
+          <figcaption><b>MINI</b>For project cards, chips and anywhere small.</figcaption>
         </figure>
         <figure>
           <div className="mark-variant" aria-hidden="true">
-            <CMark size={72} />
+            <CMark size={88} />
           </div>
-          <figcaption>MARK</figcaption>
+          <figcaption><b>MARK</b>The ring opened into a C, with a chord stacked in the gap.</figcaption>
         </figure>
       </div>
     </div>
