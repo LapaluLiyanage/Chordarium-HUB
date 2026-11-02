@@ -5,7 +5,8 @@ import Home from './pages/Home'
 import Learn from './pages/Learn'
 import Articles from './pages/Articles'
 import News from './pages/News'
-import { initReveals, prefersReducedMotion } from './lib/motion'
+import { initReveals } from './lib/motion'
+import { scrollToTarget, startSmoothScroll } from './lib/smoothScroll'
 
 const TITLES: Record<string, string> = {
   '/': 'Chordarium',
@@ -23,13 +24,15 @@ export default function App() {
 
   // Scroll to the hash target, or to the top on a new page.
   useEffect(() => {
-    const behavior = prefersReducedMotion() ? 'auto' : 'smooth'
     const id = window.setTimeout(() => {
-      if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ behavior })
-      else window.scrollTo(0, 0)
+      const target = hash ? document.getElementById(hash.slice(1)) : null
+      if (target) scrollToTarget(target)
+      else scrollToTarget(0, true)
     }, 50)
     return () => window.clearTimeout(id)
   }, [pathname, hash])
+
+  useEffect(() => startSmoothScroll(), [])
 
   useEffect(() => {
     let cleanup = () => {}

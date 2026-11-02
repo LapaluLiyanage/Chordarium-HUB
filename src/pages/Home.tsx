@@ -13,11 +13,17 @@ import { DOORS, PROJECTS } from '../data/projects'
 // Three.js lives in its own chunks, loaded after first paint.
 const HeroLattice = lazy(() => import('../components/HeroLattice'))
 const RingSection = lazy(() => import('../components/RingSection'))
+const FieldBackdrop = lazy(() => import('../components/FieldBackdrop'))
 
 export default function Home() {
   return (
     <>
       <header className="hero" id="hero">
+        <div className="hero-bg" aria-hidden="true">
+          <Suspense fallback={null}>
+            <FieldBackdrop variant="hero" />
+          </Suspense>
+        </div>
         <HeroNav />
         <div className="hero-grid">
           <div className="hero-copy">
@@ -67,6 +73,9 @@ export default function Home() {
         </section>
 
         <section className="section section-dark" id="ring" aria-label="The Chordarium ring">
+          <Suspense fallback={null}>
+            <FieldBackdrop variant="ring" />
+          </Suspense>
           <p className="eyebrow">CHORDARIUM RING</p>
           <h2 className="display section-title">EVERY CHORD, ON ONE CIRCLE.</h2>
           <Suspense fallback={<div className="ring-canvas" aria-hidden="true" />}>

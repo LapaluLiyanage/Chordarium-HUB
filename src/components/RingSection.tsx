@@ -27,6 +27,11 @@ export default function RingSection() {
     audio.setRing(chord, auto)
   }, [chord, auto])
 
+  // Tells the dot-field backdrop to send a ripple across.
+  useEffect(() => {
+    window.dispatchEvent(new Event('ring:chord'))
+  }, [chord])
+
   const lastStruck = useRef<Chord | null>(null)
   useEffect(() => {
     if (lastStruck.current === chord) return

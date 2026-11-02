@@ -177,7 +177,7 @@ export default function ChordRing({ chord, onTapNote }: Props) {
             verts.set(to)
             shape.set(to)
             first = false
-            shapeGeo.attributes.position.needsUpdate = true
+            shapeGeo.attributes.position.needsUpdate = fillGeo.attributes.position.needsUpdate = true
           } else {
             const from = Float32Array.from(verts)
             gsap.killTweensOf(vp)
@@ -189,7 +189,7 @@ export default function ChordRing({ chord, onTapNote }: Props) {
               onUpdate: () => {
                 for (let k = 0; k < 15; k++) verts[k] = from[k] + (to[k] - from[k]) * vp.t
                 shape.set(verts)
-                shapeGeo.attributes.position.needsUpdate = true
+                shapeGeo.attributes.position.needsUpdate = fillGeo.attributes.position.needsUpdate = true
               },
             })
           }
