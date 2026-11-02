@@ -32,7 +32,7 @@ export default function Home() {
             </p>
             <div className="btn-row">
               <Link to={{ pathname: '/', hash: '#projects' }} className="btn btn-ink">SEE THE TOOLS ↓</Link>
-              <Link to={{ pathname: '/', hash: '#ring' }} className="btn btn-outline">MEET THE RING</Link>
+              <Link to={{ pathname: '/', hash: '#ring' }} className="btn btn-outline">MEET THE CHORDARIUM RING</Link>
             </div>
           </div>
           <Suspense fallback={<div className="lattice lattice-canvas" />}>
@@ -67,7 +67,7 @@ export default function Home() {
         </section>
 
         <section className="section section-dark" id="ring" aria-label="The Chordarium ring">
-          <p className="eyebrow">THE RING</p>
+          <p className="eyebrow">CHORDARIUM RING</p>
           <h2 className="display section-title">EVERY CHORD, ON ONE CIRCLE.</h2>
           <Suspense fallback={<div className="ring-canvas" aria-hidden="true" />}>
             <RingSection />

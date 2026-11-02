@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Story } from '../../data/news'
 import Illustration from './Illustration'
 
@@ -7,9 +8,16 @@ interface Props {
 }
 
 export default function StoryCard({ story, size = 'row' }: Props) {
+  const [broken, setBroken] = useState(false)
   return (
     <article className={`story story-${size}`}>
-      <Illustration art={story.art} label={story.headline} />
+      {story.image && !broken ? (
+        <div className="news-pic">
+          <img src={story.image} alt="" loading="lazy" referrerPolicy="no-referrer" onError={() => setBroken(true)} />
+        </div>
+      ) : (
+        <Illustration art={story.art} label={story.headline} />
+      )}
       <p className="story-tags">
         <span className="story-chip">{story.section}</span>
         <span>{story.country}</span>

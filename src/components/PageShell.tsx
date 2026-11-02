@@ -8,10 +8,12 @@ interface Props {
   label: string
   title: string
   desc: string
+  /** Pass false to hide the "coming soon" stamp. */
+  stamp?: boolean
   children: React.ReactNode
 }
 
-export default function PageShell({ page, label, title, desc, children }: Props) {
+export default function PageShell({ page, label, title, desc, stamp = true, children }: Props) {
   return (
     <>
       <header className="shell-head">
@@ -22,7 +24,7 @@ export default function PageShell({ page, label, title, desc, children }: Props)
             <h1 className="display shell-title">{title}</h1>
             <p className="shell-desc">{desc}</p>
           </div>
-          <Stamp />
+          {stamp && <Stamp />}
         </div>
       </header>
       <main id="main">

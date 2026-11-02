@@ -6,6 +6,7 @@ export interface RawItem {
   description: string
   pubDate: string
   source: string
+  image?: string
 }
 
 const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' }
@@ -28,6 +29,31 @@ function tag(block: string, name: string): string {
   return m ? clean(m[1]) : ''
 }
 
+function attr(tagText: string, name: string): string {
+  const m = tagText.match(new RegExp(`\\s${name}=["']([^"']*)["']`, 'i'))
+  return m ? decode(m[1]) : ''
+}
+
+const isHttps = (u: string) => /^https:\/\/[^\s"'<>]+$/.test(u)
+
+/** Best picture for an item: largest media:content/thumbnail, then an image enclosure, then the first <img>. */
+export function pickImage(block: string): string | undefined {
+  const media = [...block.matchAll(/<media:(?:content|thumbnail)\b[^>]*>/gi)]
+    .map((m) => ({ url: attr(m[0], 'url'), w: Number(attr(m[0], 'width')) || 0, medium: attr(m[0], 'medium'), type: attr(m[0], 'type') }))
+    .filter((m) => isHttps(m.url) && (!m.medium || m.medium === 'image') && (!m.type || m.type.startsWith('image')))
+    .sort((a, b) => b.w - a.w)
+  if (media[0]) return media[0].url
+  for (const m of block.matchAll(/<enclosure\b[^>]*>/gi)) {
+    if (attr(m[0], 'type').startsWith('image') && isHttps(attr(m[0], 'url'))) return attr(m[0], 'url')
+  }
+  const html = decode(block.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1'))
+  for (const m of html.matchAll(/<img\b[^>]*>/gi)) {
+    const url = attr(m[0], 'data-lazy-src') || attr(m[0], 'src')
+    if (isHttps(url)) return url
+  }
+  return undefined
+}
+
 export function parseFeed(xml: string): RawItem[] {
   const items = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) ?? []
   return items
@@ -37,18 +63,22 @@ export function parseFeed(xml: string): RawItem[] {
       description: tag(block, 'description'),
       pubDate: tag(block, 'pubDate'),
       source: tag(block, 'source'),
+      image: pickImage(block),
     }))
     .filter((i) => i.title && /^https?:\/\//.test(i.link))
 }
 
 const SECTIONS: Array<[RegExp, string, IllustrationKey]> = [
+  [/\b(new album|new single|new song|new music|album|single|ep|mixtape|drops?|dropped|releases?|released|unveils?|debut)\b/i, 'NEW RELEASE', 'mic'],
+  [/\b(grammys?|awards?|nominat\w+|brit awards|mtv)\b/i, 'AWARDS', 'stage'],
+  [/\b(charts?|no\.? ?1|number one|hot 100|streams?|streaming)\b/i, 'CHARTS', 'staff'],
+  [/\b(review|reviewed)\b/i, 'REVIEWS', 'cassette'],
+  [/\b(tour|tickets?|residency|festival|concert|gig|headline[sd]?|live)\b/i, 'TOURS & LIVE', 'stage'],
   [/\b(vinyl|record store|lp|pressing)\b/i, 'VINYL', 'vinyl'],
   [/\b(cassette|tape|retro)\b/i, 'RETRO', 'cassette'],
   [/\b(guitar|bass|strings|violin|sitar)\b/i, 'GUITAR', 'guitar'],
   [/\b(drum|drummer|percussion|rhythm)\b/i, 'RHYTHM', 'drum'],
   [/\b(sheet music|school|lesson|education|students?|classroom)\b/i, 'EDUCATION', 'staff'],
-  [/\b(festival|tour|concert|live|gig|stage|headline[sd]?)\b/i, 'LIVE', 'stage'],
-  [/\b(album|single|ep|release[sd]?|debut|track)\b/i, 'NEW MUSIC', 'mic'],
 ]
 
 export function classify(text: string): { section: string; art: IllustrationKey } {
@@ -85,6 +115,7 @@ export function toStory(item: RawItem, country: Country, feedName: string): Stor
     byline: source.toUpperCase(),
     source,
     url: item.link,
+    image: item.image,
     date: Number.isNaN(date.getTime()) ? undefined : date.toISOString(),
   }
 }

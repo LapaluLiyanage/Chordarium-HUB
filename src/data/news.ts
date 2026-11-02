@@ -1,4 +1,4 @@
-export const COUNTRIES = ['SRI LANKA', 'INDIA', 'UK', 'USA', 'JAPAN'] as const
+export const COUNTRIES = ['WORLD', 'SRI LANKA', 'INDIA', 'UK', 'USA', 'JAPAN'] as const
 export type Country = (typeof COUNTRIES)[number]
 export type IllustrationKey = 'mic' | 'bunting' | 'stage' | 'vinyl' | 'cassette' | 'drum' | 'guitar' | 'staff'
 
@@ -12,6 +12,7 @@ export interface Story {
   art: IllustrationKey
   /** Present on live stories only. */
   source?: string
+  image?: string
   url?: string
   date?: string
 }
@@ -27,6 +28,7 @@ export const STORIES: Story[] = [
   { id: 's7', country: 'INDIA', section: 'STRINGS', headline: 'Workshop revives a nearly forgotten string instrument', summary: 'A sample story about a craftsman, a long neck and a waiting list of students.', byline: 'SAMPLE DESK', art: 'guitar' },
   { id: 's8', country: 'UK', section: 'EDUCATION', headline: 'Libraries start lending sheet music by the shelf', summary: 'A sample story about scores, pencils and a quiet corner that fills up on Saturdays.', byline: 'SAMPLE DESK', art: 'staff' },
   { id: 's9', country: 'USA', section: 'LIVE', headline: 'Small-town opera house reopens with a free concert', summary: 'A sample story about fresh paint, old velvet seats and a full house.', byline: 'SAMPLE DESK', art: 'stage' },
+  { id: 's11', country: 'WORLD', section: 'NEW RELEASE', headline: 'A superstar surprise-drops an album overnight', summary: 'A sample story about a record that appeared at midnight and had fans trading track lists by breakfast.', byline: 'SAMPLE DESK', art: 'mic' },
   { id: 's10', country: 'JAPAN', section: 'GUITAR', headline: 'Bedroom guitarists share chord charts for city-pop favourites', summary: 'A sample story about hand-drawn diagrams passed around between friends.', byline: 'SAMPLE DESK', art: 'guitar' },
 ]
 

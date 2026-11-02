@@ -2,7 +2,7 @@ import { FEEDS } from '../data/feeds'
 import { COUNTRIES, type Story } from '../data/news'
 import { parseFeed, toStory } from './rss'
 
-const PER_FEED = 8
+const PER_FEED = 10
 
 async function load(url: string): Promise<string> {
   const res = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0 ChordariumHub', accept: 'application/rss+xml, application/xml, text/xml' }, signal: AbortSignal.timeout(8000) })

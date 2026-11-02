@@ -8,7 +8,7 @@ export function HeroNav() {
   const links = [
     ['THE TOOLS', '#projects'],
     ['NEW PAGES', '#soon'],
-    ['THE RING', '#ring'],
+    ['CHORDARIUM RING', '#ring'],
     ['ABOUT', '#about'],
   ]
   return (

@@ -34,9 +34,9 @@ export default function News() {
   const rest = others.slice(2)
 
   return (
-    <PageShell page="news" label="MUSIC NEWS" title="MUSIC NEWS" desc="Headlines from the music world, country by country.">
+    <PageShell page="news" label="MUSIC NEWS" title="MUSIC NEWS" stamp={!live} desc="New releases and headlines from the music world and from five countries.">
       <section className="section paper">
-        <Masthead />
+        <Masthead live={live} />
         <SectionBar value={country} onChange={setCountry} />
         <FilterBar sections={sections} section={section} onSection={setSection} search={search} onSearch={setSearch} sort={sort} onSort={setSort} />
         <p className="sr-only" aria-live="polite" role="status">
@@ -63,15 +63,15 @@ export default function News() {
         )}
         <p className="footnote">
           {live
-            ? 'Headlines come from the publishers named on each story, and every story links to where it came from. Pictures are our own drawings.'
+            ? 'Headlines come from the publishers named on each story, and every story links to where it came from. Pictures belong to the publishers; stories without one show our own drawings.'
             : 'The live feed is unavailable right now, so these are sample stories and drawings. Check back soon.'}
         </p>
       </section>
       <section className="section">
-        <h2 className="display section-title" data-reveal>HOW IT WILL WORK.</h2>
+        <h2 className="display section-title" data-reveal>HOW IT WORKS.</h2>
         <ol className="steps">
-          <li data-reveal><span className="step-n display">1</span><h3 className="display">PICK A COUNTRY</h3><p>Choose the places you want to follow.</p></li>
-          <li data-reveal><span className="step-n display">2</span><h3 className="display">FRESH HEADLINES</h3><p>New stories, updated through the day.</p></li>
+          <li data-reveal><span className="step-n display">1</span><h3 className="display">PICK A PLACE</h3><p>World news, or a country you follow.</p></li>
+          <li data-reveal><span className="step-n display">2</span><h3 className="display">FRESH HEADLINES</h3><p>New releases, tours, charts and awards, refreshed through the day.</p></li>
           <li data-reveal><span className="step-n display">3</span><h3 className="display">LINKED TO THE SOURCE</h3><p>Every story links back to where it came from.</p></li>
         </ol>
       </section>

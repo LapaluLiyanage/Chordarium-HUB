@@ -10,6 +10,13 @@ const gnews = (query: string, hl: string, gl: string) =>
 
 // Swap sources here. Each country needs at least one feed.
 export const FEEDS: Record<Country, Feed[]> = {
+  // Big-name artists and new releases from anywhere.
+  WORLD: [
+    { name: 'Billboard', url: 'https://www.billboard.com/feed/' },
+    { name: 'Stereogum', url: 'https://www.stereogum.com/feed/' },
+    { name: 'Consequence', url: 'https://consequence.net/feed/' },
+    { name: 'Google News', url: gnews('new album OR new single OR new music video release', 'en', 'US') },
+  ],
   'SRI LANKA': [{ name: 'Google News', url: gnews('music Sri Lanka', 'en-LK', 'LK') }],
   INDIA: [
     { name: 'Rolling Stone India', url: 'https://rollingstoneindia.com/feed/' },
