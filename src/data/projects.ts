@@ -10,7 +10,7 @@ export interface Project {
   dark?: boolean
 }
 
-// Links are placeholders until Lapalu supplies the real URLs.
+// Links marked '#projects' are placeholders until Lapalu supplies the real URLs.
 export const PROJECTS: Project[] = [
   {
     id: 'chorder',
@@ -18,9 +18,9 @@ export const PROJECTS: Project[] = [
     eyebrow: 'CHORDARIUM',
     status: 'WORKING',
     cta: 'OPEN CHORDER',
-    href: '#projects',
-    blurb: "Paste a YouTube link and get the song's chords, synced to the video. Edit them, loop a verse, and print the sheet.",
-    tags: ['YouTube → chords', 'PDF · MIDI · ChordPro'],
+    href: 'https://chordariumchorder.lapalu.me',
+    blurb: "Paste a YouTube link or upload an MP3 and get the song's chords, synced to the music. Edit them, loop a verse, and print the sheet.",
+    tags: ['YouTube / MP3 → chords', 'PDF · MIDI · ChordPro'],
     dark: true,
   },
   {
