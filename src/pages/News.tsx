@@ -1,27 +1,49 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import PageShell from '../components/PageShell'
 import Masthead from '../components/news/Masthead'
 import SectionBar from '../components/news/SectionBar'
+import FilterBar from '../components/news/FilterBar'
 import StoryCard from '../components/news/StoryCard'
-import { STORIES, filterStories, type Country } from '../data/news'
+import { STORIES, loadStories, queryStories, sectionsOf, type Country, type SortOrder, type Story } from '../data/news'
 
 export default function News() {
   const [country, setCountry] = useState<Country | 'ALL'>('ALL')
-  const stories = filterStories(STORIES, country)
+  const [section, setSection] = useState('ALL')
+  const [search, setSearch] = useState('')
+  const [sort, setSort] = useState<SortOrder>('newest')
+  const [all, setAll] = useState<Story[]>(STORIES)
+  const [live, setLive] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    loadStories().then((r) => {
+      if (cancelled) return
+      setAll(r.stories)
+      setLive(r.live)
+      setLoading(false)
+    })
+    return () => { cancelled = true }
+  }, [])
+
+  const sections = useMemo(() => sectionsOf(all), [all])
+  const stories = useMemo(() => queryStories(all, { country, section, search, sort }), [all, country, section, search, sort])
+  const kind = live ? 'stories' : 'sample stories'
   const [lead, ...others] = stories
   const side = others.slice(0, 2)
   const rest = others.slice(2)
 
   return (
-    <PageShell page="news" label="MUSIC NEWS" title="MUSIC NEWS" desc="Headlines from the music world, country by country. Sample edition for now.">
+    <PageShell page="news" label="MUSIC NEWS" title="MUSIC NEWS" desc="Headlines from the music world, country by country.">
       <section className="section paper">
         <Masthead />
         <SectionBar value={country} onChange={setCountry} />
+        <FilterBar sections={sections} section={section} onSection={setSection} search={search} onSearch={setSearch} sort={sort} onSort={setSort} />
         <p className="sr-only" aria-live="polite" role="status">
-          {stories.length ? `Showing ${stories.length} sample stories for ${country === 'ALL' ? 'all countries' : country}.` : `No stories for ${country} yet.`}
+          {stories.length ? `Showing ${stories.length} ${kind} for ${country === 'ALL' ? 'all countries' : country}.` : 'No stories match these filters.'}
         </p>
         {!lead ? (
-          <p className="empty">No stories here yet. Check back soon, or try another country.</p>
+          <p className="empty">{loading ? 'Loading the latest headlines…' : 'No stories match these filters. Try another country, section or search.'}</p>
         ) : (
           <>
             <div className="front">
@@ -40,7 +62,9 @@ export default function News() {
           </>
         )}
         <p className="footnote">
-          Every story and picture on this page is a sample drawing. The real edition will use real reporting and photos with credits.
+          {live
+            ? 'Headlines come from the publishers named on each story, and every story links to where it came from. Pictures are our own drawings.'
+            : 'The live feed is unavailable right now, so these are sample stories and drawings. Check back soon.'}
         </p>
       </section>
       <section className="section">

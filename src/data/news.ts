@@ -10,6 +10,10 @@ export interface Story {
   summary: string
   byline: string
   art: IllustrationKey
+  /** Present on live stories only. */
+  source?: string
+  url?: string
+  date?: string
 }
 
 // Every story here is a SAMPLE. Do not present these as real news.
@@ -28,4 +32,42 @@ export const STORIES: Story[] = [
 
 export function filterStories(stories: Story[], country: Country | 'ALL'): Story[] {
   return country === 'ALL' ? stories : stories.filter((s) => s.country === country)
+}
+
+export type SortOrder = 'newest' | 'oldest'
+
+export interface NewsQuery {
+  country: Country | 'ALL'
+  section: string | 'ALL'
+  search: string
+  sort: SortOrder
+}
+
+export function queryStories(stories: Story[], q: NewsQuery): Story[] {
+  const needle = q.search.trim().toLowerCase()
+  const out = filterStories(stories, q.country).filter(
+    (s) =>
+      (q.section === 'ALL' || s.section === q.section) &&
+      (!needle || `${s.headline} ${s.summary}`.toLowerCase().includes(needle)),
+  )
+  // Stories without a date (the samples) keep their original order.
+  if (!out.some((s) => s.date)) return out
+  const dir = q.sort === 'newest' ? -1 : 1
+  return [...out].sort((a, b) => dir * (a.date ?? '').localeCompare(b.date ?? ''))
+}
+
+export function sectionsOf(stories: Story[]): string[] {
+  return [...new Set(stories.map((s) => s.section))].sort()
+}
+
+export async function loadStories(fetchFn: typeof fetch = fetch): Promise<{ stories: Story[]; live: boolean }> {
+  try {
+    const res = await fetchFn('/api/news')
+    if (!res.ok) throw new Error(String(res.status))
+    const data = (await res.json()) as { stories?: Story[] }
+    if (data.stories?.length) return { stories: data.stories, live: true }
+  } catch {
+    // fall through to the samples
+  }
+  return { stories: STORIES, live: false }
 }

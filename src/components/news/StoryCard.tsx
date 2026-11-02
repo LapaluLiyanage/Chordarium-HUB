@@ -16,7 +16,16 @@ export default function StoryCard({ story, size = 'row' }: Props) {
       </p>
       <h3 className="story-head display">{story.headline}</h3>
       <p className="story-sum">{story.summary}</p>
-      <p className="story-by">{story.byline}</p>
+      <p className="story-by">
+        {story.byline}
+        {story.url && (
+          <>
+            {story.date && ` · ${new Date(story.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`}
+            {' · '}
+            <a href={story.url} target="_blank" rel="noopener noreferrer">READ AT SOURCE</a>
+          </>
+        )}
+      </p>
     </article>
   )
 }

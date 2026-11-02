@@ -278,6 +278,11 @@ html.cc-on, html.cc-on * { cursor: none !important; }
 .news-pic { position: relative; border: 3px solid var(--ink); overflow: hidden; aspect-ratio: 3 / 2; }
 .news-pic svg { display: block; width: 100%; height: 100%; }
 .halftone { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: 0.35; background-image: radial-gradient(var(--ink) 1px, transparent 1.4px); background-size: 6px 6px; }
+.filterbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0 20px; }
+.news-search, .news-sort { font: inherit; font-size: 0.9rem; background: transparent; color: inherit; border: 2px solid var(--ink); border-radius: 2px; padding: 6px 12px; }
+.news-search { flex: 1 1 200px; min-width: 0; }
+.filterbar .chips { display: flex; flex-wrap: wrap; gap: 8px; flex-basis: 100%; }
+.story-by a { color: inherit; text-decoration: underline; }
 .empty { padding: 48px 0; text-align: center; font-size: 1.1rem; }
 
 /* Cursor */
