@@ -25,7 +25,7 @@ void main() {
   float e = wave * 0.55 + ripple * 1.5 + beat * 0.35 * exp(-d0 * 2.2);
   gl_PointSize = uPx * (2.2 + e * 4.6);
   float side = mix(0.3, 1.0, smoothstep(0.1, 0.7, aUv.x));
-  vA = clamp(0.16 + e * 0.5, 0.0, 0.8) * side;
+  vA = clamp(0.07 + e * 0.24, 0.0, 0.4) * side;
   gl_Position = vec4(aUv * 2.0 - 1.0, 0.0, 1.0);
 }`
 
