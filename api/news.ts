@@ -1,4 +1,4 @@
-import { fetchNews } from '../src/lib/newsServer'
+import { fetchNews } from '../src/lib/newsServer.js'
 
 export default async function handler(_req: unknown, res: {
   setHeader(k: string, v: string): void

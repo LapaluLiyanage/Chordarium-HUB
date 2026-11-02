@@ -1,6 +1,6 @@
-import { FEEDS } from '../data/feeds'
-import { COUNTRIES, type Story } from '../data/news'
-import { parseFeed, toStory } from './rss'
+import { FEEDS } from '../data/feeds.js'
+import { COUNTRIES, type Story } from '../data/news.js'
+import { parseFeed, toStory } from './rss.js'
 
 const PER_FEED = 10
 
