@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { BufferAttribute, BufferGeometry, Color, Points, ShaderMaterial, Vector2 } from 'three'
+import { BufferAttribute, BufferGeometry, Color, Points, ShaderMaterial } from 'three'
 import { prefersReducedMotion } from '../lib/motion'
 import { createStage, cssVar } from '../lib/stage'
 
@@ -7,12 +7,11 @@ const BEAT_RAD = (92 / 60) * Math.PI * 2
 
 /**
  * Hero: a halftone field of ink dots. Waves roll out from the Tonnetz, pulse on the beat
- * and ripple around the cursor. Strongest on the right so the headline stays readable.
+ * Strongest on the right so the headline stays readable.
  */
 const HERO_VERT = /* glsl */ `
 attribute vec2 aUv;
-uniform float uTime, uAspect, uPx, uMouseK;
-uniform vec2 uMouse;
+uniform float uTime, uAspect, uPx;
 varying float vA;
 void main() {
   vec2 q = vec2((aUv.x - 0.5) * uAspect, aUv.y - 0.5);
@@ -20,9 +19,7 @@ void main() {
   float beat = pow(max(0.0, cos(uTime * ${BEAT_RAD.toFixed(4)})), 6.0);
   float d0 = length(q - src);
   float wave = sin(d0 * 9.0 - uTime * 1.6) * 0.5 + 0.5;
-  float d1 = length(q - uMouse);
-  float ripple = sin(d1 * 26.0 - uTime * 5.0) * exp(-d1 * 4.5) * uMouseK;
-  float e = wave * 0.55 + ripple * 1.5 + beat * 0.35 * exp(-d0 * 2.2);
+  float e = wave * 0.55 + beat * 0.35 * exp(-d0 * 2.2);
   gl_PointSize = uPx * (2.2 + e * 4.6);
   float side = mix(0.3, 1.0, smoothstep(0.1, 0.7, aUv.x));
   vA = clamp(0.07 + e * 0.24, 0.0, 0.4) * side;
@@ -71,8 +68,6 @@ export default function FieldBackdrop({ variant }: { variant: 'hero' | 'ring' })
         uTime,
         uAspect: { value: 1 },
         uPx: { value: px },
-        uMouseK: { value: 0 },
-        uMouse: { value: new Vector2(9, 9) },
         uColor: { value: new Color(cssVar('--ink', '#231d17')) },
       }
       const points = new Points(new BufferGeometry(), new ShaderMaterial({ vertexShader: HERO_VERT, fragmentShader: FRAG, uniforms, transparent: true, depthTest: false }))
@@ -100,23 +95,12 @@ export default function FieldBackdrop({ variant }: { variant: 'hero' | 'ring' })
         timer = window.setTimeout(build, 120)
       })
       ro.observe(el)
-      let lastMove = -9
-      const onMove = (e: PointerEvent) => {
-        const r = el.getBoundingClientRect()
-        if (e.clientY < r.top || e.clientY > r.bottom) return
-        uniforms.uMouse.value.set(((e.clientX - r.left) / r.width - 0.5) * uniforms.uAspect.value, 0.5 - (e.clientY - r.top) / r.height)
-        lastMove = uTime.value
-      }
-      window.addEventListener('pointermove', onMove, { passive: true })
       stage.run((t) => {
         uTime.value = t
-        // The ripple fades out a moment after the cursor stops.
-        uniforms.uMouseK.value += ((t - lastMove > 0.4 ? 0 : 1) - uniforms.uMouseK.value) * 0.08
       })
       cleanup = () => {
         window.clearTimeout(timer)
         ro.disconnect()
-        window.removeEventListener('pointermove', onMove)
       }
     } else {
       const cols = 110
