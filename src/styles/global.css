@@ -468,6 +468,6 @@ body { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; line-hei
 }
 
 /* Home footer: the motto, spaced out, over the legal line */
-.footer-home { gap: 40px; padding-top: 88px; padding-bottom: 40px; }
+.footer-home { justify-items: center; text-align: center; gap: 40px; padding-top: 88px; padding-bottom: 40px; }
 .footer-home .footer-motto { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.15em 0.55em; }
-.footer-legal { align-self: stretch; padding-top: 24px; border-top: 1px solid rgba(35, 29, 23, 0.25); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-align: center; }
+.footer-legal { justify-self: stretch; width: 100%; padding-top: 24px; border-top: 1px solid rgba(35, 29, 23, 0.25); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-align: center; }

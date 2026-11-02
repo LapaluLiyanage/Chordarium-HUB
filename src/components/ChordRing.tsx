@@ -82,16 +82,19 @@ export default function ChordRing({ chord, onTapNote }: Props) {
         )
       }
 
-      // dust behind
-      const dust = new Float32Array(240 * 3)
-      for (let i = 0; i < 240; i++) {
-        dust[i * 3] = (Math.random() - 0.5) * 22
-        dust[i * 3 + 1] = (Math.random() - 0.5) * 16
-        dust[i * 3 + 2] = -3 - Math.random() * 4
+      // dust: a shell around the ring that turns slowly, as on the Chorder wheel
+      const dust = new Float32Array(420 * 3)
+      for (let i = 0; i < 420; i++) {
+        const d = 4 + Math.random() * 5
+        const a = Math.random() * Math.PI * 2
+        const u = Math.random() * 2 - 1
+        const k = Math.sqrt(1 - u * u)
+        dust.set([d * k * Math.cos(a), d * k * Math.sin(a), d * u * 0.6], i * 3)
       }
       const dustGeo = new BufferGeometry()
       dustGeo.setAttribute('position', new BufferAttribute(dust, 3))
-      stage.scene.add(new Points(dustGeo, new PointsMaterial({ color: cream, size: 0.05, transparent: true, opacity: 0.35 })))
+      const dustPts = new Points(dustGeo, new PointsMaterial({ color: cream, size: 0.035, transparent: true, opacity: 0.35 }))
+      stage.scene.add(dustPts)
 
       // spheres + labels
       const sphereGeo = new SphereGeometry(0.34, 24, 16)
@@ -105,7 +108,7 @@ export default function ChordRing({ chord, onTapNote }: Props) {
         lab.sprite.scale.set(0.8, 0.8, 1)
         lab.sprite.position.set(x * 1.2, y * 1.2, 0)
         group.add(mesh, lab.sprite)
-        return { mesh, mat, s: 1, z: 0, hover: 0, color: soft.clone() }
+        return { mesh, mat, s: 1, z: 0, color: soft.clone() }
       })
 
       // chord shape: loop + fan fill, 5 vertices
@@ -161,7 +164,6 @@ export default function ChordRing({ chord, onTapNote }: Props) {
             else if (p === c.bass) { color = teal; s = 1.5; z = 0.4 }
             else if (c.pcs.includes(p)) { color = accentNow; s = 1.35; z = 0.3 }
             b.color.copy(color)
-            b.mat.color.copy(color)
             gsap.to(b, { s, z, duration: 0.5, ease: 'power3.out' })
           })
           const to = new Float32Array(15)
@@ -196,88 +198,88 @@ export default function ChordRing({ chord, onTapNote }: Props) {
       apiRef.current = api
       api.show(chordRef.current)
 
-      // interaction
+      // interaction: same model as the Chorder wheel. Rotation eases toward a target,
+      // so the ring never snaps when the cursor moves, leaves or stops.
       const canvas = stage.renderer.domElement
       const ray = new Raycaster()
       const ndc = new Vector2()
-      const pointer = { x: 0, y: 0 }
+      const REST_TILT = -0.35
+      const target = { x: REST_TILT, y: 0 }
+      const pulse = new Map<number, number>()
       let spin = 0
       let velocity = 0
-      let dragging = false
-      let lastX = 0
-      let downX = 0
-      let downT = 0
+      let dragX: number | null = null
       let hovered = -1
 
       const pick = (e: PointerEvent) => {
         const r = canvas.getBoundingClientRect()
-        ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1)
+        const nx = ((e.clientX - r.left) / r.width) * 2 - 1
+        const ny = ((e.clientY - r.top) / r.height) * 2 - 1
+        ndc.set(nx, -ny)
         ray.setFromCamera(ndc, stage.camera)
         const hit = ray.intersectObjects(balls.map((b) => b.mesh), false)[0]
-        return hit ? (hit.object.userData.index as number) : -1
-      }
-      const setCursor = () => {
-        canvas.style.cursor = dragging ? 'grabbing' : hovered >= 0 ? 'pointer' : 'grab'
-      }
-      const onDown = (e: PointerEvent) => {
-        dragging = true
-        lastX = downX = e.clientX
-        downT = performance.now()
-        velocity = 0
-        canvas.setPointerCapture(e.pointerId)
-        setCursor()
+        return { nx, ny, index: hit ? (hit.object.userData.index as number) : -1 }
       }
       const onMove = (e: PointerEvent) => {
-        const r = canvas.getBoundingClientRect()
-        pointer.x = ((e.clientX - r.left) / r.width - 0.5) * 2
-        pointer.y = ((e.clientY - r.top) / r.height - 0.5) * 2
-        if (dragging) {
-          const dx = e.clientX - lastX
-          lastX = e.clientX
-          velocity = dx * 0.006
-          spin += velocity
+        const { nx, ny, index } = pick(e)
+        target.x = REST_TILT + ny * 0.35
+        if (dragX !== null) {
+          const d = (e.clientX - dragX) * 0.008
+          spin += d
+          velocity = d
+          dragX = e.clientX
         } else {
-          hovered = pick(e)
+          target.y = nx * 0.3
         }
-        setCursor()
+        hovered = index
+        canvas.style.cursor = index >= 0 ? 'pointer' : dragX === null ? 'grab' : 'grabbing'
       }
-      const onUp = (e: PointerEvent) => {
-        if (!dragging) return
-        dragging = false
-        if (Math.abs(e.clientX - downX) < 6 && performance.now() - downT < 400) {
-          const i = pick(e)
-          if (i >= 0) tapRef.current(ringPc(i))
+      const onDown = (e: PointerEvent) => {
+        dragX = e.clientX
+        velocity = 0
+        canvas.setPointerCapture?.(e.pointerId)
+        const { index } = pick(e)
+        if (index >= 0) {
+          tapRef.current(ringPc(index))
+          pulse.set(index, 1)
         }
-        setCursor()
+        canvas.style.cursor = index >= 0 ? 'pointer' : 'grabbing'
+      }
+      const onUp = () => {
+        dragX = null
       }
       const onLeave = () => {
         hovered = -1
-        pointer.x = pointer.y = 0
-        setCursor()
       }
       canvas.style.touchAction = 'pan-y'
       canvas.dataset.cursor = 'drag'
-      canvas.addEventListener('pointerdown', onDown)
+      canvas.style.cursor = 'grab'
       canvas.addEventListener('pointermove', onMove)
-      canvas.addEventListener('pointerup', onUp)
-      canvas.addEventListener('pointercancel', onUp)
+      canvas.addEventListener('pointerdown', onDown)
       canvas.addEventListener('pointerleave', onLeave)
-      setCursor()
+      window.addEventListener('pointerup', onUp)
 
-      stage.run(() => {
-        if (!dragging) {
-          spin += velocity
+      group.rotation.x = REST_TILT
+      stage.run((t) => {
+        if (dragX === null) {
           velocity *= 0.94
-          if (!reduced) spin += 0.0025
+          spin += velocity + (reduced ? 0 : 0.0025)
         }
+        group.rotation.x += ((reduced ? REST_TILT : target.x) - group.rotation.x) * 0.06
+        group.rotation.y += ((reduced ? 0 : target.y) + Math.sin(spin) * 0.5 - group.rotation.y) * 0.06
         group.rotation.z = spin * 0.6
-        group.rotation.y = Math.sin(spin) * 0.5 + (reduced ? 0 : pointer.x * 0.12)
-        group.rotation.x = reduced ? 0 : pointer.y * 0.1
+        dustPts.rotation.y = reduced ? 0 : t * 0.03
         balls.forEach((b, i) => {
-          const target = hovered === i ? 1 : 0
-          b.hover += (target - b.hover) * 0.2
-          b.mesh.scale.setScalar(b.s * (1 + 0.25 * b.hover))
-          b.mesh.position.z = b.z + 0.6 * b.hover
+          let want = b.s + (hovered === i ? 0.3 : 0)
+          const pl = pulse.get(i)
+          if (pl) {
+            want += pl * 0.8
+            pulse.set(i, pl * 0.9)
+            if (pl < 0.02) pulse.delete(i)
+          }
+          b.mesh.scale.setScalar(b.mesh.scale.x + (want - b.mesh.scale.x) * 0.18)
+          b.mat.color.lerp(b.color, 0.15)
+          b.mesh.position.z = b.z > 0 && !reduced ? b.z + Math.sin(t * 2 + i) * 0.15 : b.z
         })
       })
 
@@ -285,9 +287,8 @@ export default function ChordRing({ chord, onTapNote }: Props) {
         apiRef.current = null
         canvas.removeEventListener('pointerdown', onDown)
         canvas.removeEventListener('pointermove', onMove)
-        canvas.removeEventListener('pointerup', onUp)
-        canvas.removeEventListener('pointercancel', onUp)
         canvas.removeEventListener('pointerleave', onLeave)
+        window.removeEventListener('pointerup', onUp)
         gsap.killTweensOf(vp)
         balls.forEach((b) => gsap.killTweensOf(b))
         stage.dispose()
