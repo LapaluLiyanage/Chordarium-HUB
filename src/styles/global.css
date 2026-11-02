@@ -465,3 +465,18 @@ body { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; line-hei
   .article h2 { grid-column: 1 / -1; grid-row: 2; }
   .variants figure { padding: 20px; }
 }
+
+/* Home footer: motto, then four tidy columns, then the legal line */
+.footer-home { text-align: left; justify-items: stretch; gap: 48px; padding-top: 72px; padding-bottom: 40px; }
+.footer-home .footer-motto { text-align: center; }
+.footer-cols { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; padding-top: 40px; border-top: 1px solid rgba(35, 29, 23, 0.25); }
+.footer-blurb { max-width: 32ch; line-height: 1.5; }
+.footer-h { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 0.7rem; letter-spacing: 0.16em; color: var(--amber); margin-bottom: 14px; }
+.footer-cols ul { display: grid; gap: 10px; }
+.footer-cols a { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.footer-cols a:hover { color: var(--amber); }
+.footer-legal { padding-top: 24px; border-top: 1px solid rgba(35, 29, 23, 0.25); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-align: center; }
+@media (max-width: 760px) {
+  .footer-cols { grid-template-columns: 1fr 1fr; }
+  .footer-blurb { grid-column: 1 / -1; }
+}

@@ -178,16 +178,21 @@ export default function HeroLattice() {
       const tilt = { x: 0, y: 0 }
       const onMove = (e: PointerEvent) => {
         const r = el.getBoundingClientRect()
-        tilt.x = ((e.clientX - r.left) / r.width - 0.5) * 2
-        tilt.y = ((e.clientY - r.top) / r.height - 0.5) * 2
+        // Clamp: the cursor is usually far outside the lattice, which used to spin it right round.
+        tilt.x = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - 0.5) * 2))
+        tilt.y = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height - 0.5) * 2))
       }
-      if (!reduced) window.addEventListener('pointermove', onMove, { passive: true })
+      const onLeave = () => { tilt.x = 0; tilt.y = 0 }
+      if (!reduced) {
+        window.addEventListener('pointermove', onMove, { passive: true })
+        document.documentElement.addEventListener('pointerleave', onLeave)
+      }
 
       const beatHz = 92 / 60
       stage.run((t) => {
         if (!reduced) {
-          group.rotation.y += (tilt.x * 0.5 - group.rotation.y) * 0.06
-          group.rotation.x += (tilt.y * 0.4 - group.rotation.x) * 0.06
+          group.rotation.y += (tilt.x * 0.18 - group.rotation.y) * 0.06
+          group.rotation.x += (tilt.y * 0.14 - group.rotation.x) * 0.06
         }
         const pulse = reduced ? 0 : Math.pow(Math.max(0, Math.cos(t * beatHz * Math.PI * 2)), 6)
         for (const n of nodes) {
@@ -201,6 +206,7 @@ export default function HeroLattice() {
       cleanup = () => {
         if (cycle) window.clearInterval(cycle)
         window.removeEventListener('pointermove', onMove)
+        document.documentElement.removeEventListener('pointerleave', onLeave)
         gsap.killTweensOf(vp)
         nodes.forEach((n) => {
           gsap.killTweensOf(n)
