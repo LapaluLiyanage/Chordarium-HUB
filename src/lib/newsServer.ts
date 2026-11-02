@@ -1,6 +1,6 @@
 import { FEEDS } from '../data/feeds.js'
 import { COUNTRIES, type Story } from '../data/news.js'
-import { parseFeed, toStory } from './rss.js'
+import { isRecent, parseFeed, toStory } from './rss.js'
 
 const PER_FEED = 10
 
@@ -15,7 +15,7 @@ export async function fetchNews(): Promise<Story[]> {
   const jobs = COUNTRIES.flatMap((country) =>
     FEEDS[country].map(async (feed) => {
       const items = parseFeed(await load(feed.url))
-      return items.slice(0, PER_FEED).map((i) => toStory(i, country, feed.name))
+      return items.map((i) => toStory(i, country, feed.name)).filter((s) => isRecent(s.date)).slice(0, PER_FEED)
     }),
   )
   const settled = await Promise.allSettled(jobs)

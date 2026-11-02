@@ -1,4 +1,4 @@
-import { classify, parseFeed, pickImage, toStory } from './rss'
+import { classify, isRecent, parseFeed, pickImage, toStory } from './rss'
 
 const xml = `<rss><channel>
 <item><title><![CDATA[Vinyl sales &amp; more]]></title><link>https://ex.com/a</link>
@@ -71,4 +71,19 @@ describe('classify types', () => {
     ['Song hits No. 1 on the Hot 100', 'CHARTS'],
     ['Coldplay add tour dates in Asia', 'TOURS & LIVE'],
   ])('%s -> %s', (text, section) => expect(classify(text).section).toBe(section))
+})
+
+describe('isRecent', () => {
+  const now = Date.parse('2026-11-02T12:00:00Z')
+  it('keeps stories from the last week and drops older or undated ones', () => {
+    expect(isRecent('2026-11-02T10:00:00Z', 7, now)).toBe(true)
+    expect(isRecent('2026-10-27T12:00:00Z', 7, now)).toBe(true)
+    expect(isRecent('2026-10-20T12:00:00Z', 7, now)).toBe(false)
+    expect(isRecent('2026-05-06T07:00:00Z', 7, now)).toBe(false)
+    expect(isRecent(undefined, 7, now)).toBe(false)
+    expect(isRecent('not a date', 7, now)).toBe(false)
+  })
+  it('drops dates far in the future', () => {
+    expect(isRecent('2026-12-01T00:00:00Z', 7, now)).toBe(false)
+  })
 })

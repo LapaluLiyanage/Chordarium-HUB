@@ -119,3 +119,9 @@ export function toStory(item: RawItem, country: Country, feedName: string): Stor
     date: Number.isNaN(date.getTime()) ? undefined : date.toISOString(),
   }
 }
+
+/** True for stories dated within the last `days`. Undated stories are not recent. */
+export function isRecent(date: string | undefined, days = 7, now = Date.now()): boolean {
+  const t = date ? Date.parse(date) : NaN
+  return !Number.isNaN(t) && t <= now + 3_600_000 && now - t <= days * 86_400_000
+}
