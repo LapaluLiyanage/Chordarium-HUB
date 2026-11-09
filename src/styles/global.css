@@ -482,3 +482,58 @@ body { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; line-hei
 .field-backdrop { position: absolute; inset: 0; pointer-events: none; }
 .section-dark { position: relative; overflow: hidden; }
 .section-dark > :not(.field-backdrop) { position: relative; z-index: 1; }
+
+/* ---- Mobile pass ---- */
+@media (max-width: 640px) {
+  :root { --pad: 20px; --radius: 22px; }
+  .nav { padding-top: 16px; padding-bottom: 12px; gap: 10px; }
+  /* Home anchor links: one swipeable row instead of a ragged wrap */
+  .nav-links {
+    flex-wrap: nowrap; overflow-x: auto; width: 100%; gap: 14px; padding-bottom: 6px; font-size: 0.64rem; letter-spacing: 0.06em; justify-content: space-between;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { white-space: nowrap; padding-block: 8px; }
+  .nav-pills { width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .nav-pills::-webkit-scrollbar { display: none; }
+  .pill { white-space: nowrap; min-height: 40px; display: inline-flex; align-items: center; }
+
+  .hero-grid { gap: 20px; padding-top: 12px; min-height: 0; }
+  .lede { font-size: 1.02rem; margin-top: 16px; }
+  .btn-row { flex-direction: column; align-items: stretch; margin-top: 24px; }
+  .btn-row .btn { justify-content: center; }
+  .btn { min-height: 48px; padding: 12px 22px; }
+  .lattice-canvas { min-height: 0; }
+
+  .section { padding-block: 56px; }
+  .section-title { margin-bottom: 32px; }
+  .card { padding: 24px; }
+  .card .btn { align-self: stretch; justify-content: center; }
+  .door { gap: 10px 14px; padding: 22px 0; }
+  .door-pill { font-size: 0.6rem; padding: 4px 10px; }
+
+  .chip, .tab { min-height: 44px; }
+  .ring-controls { flex-direction: column; align-items: stretch; }
+  .ring-controls .btn { justify-content: center; }
+  .sound { flex-direction: column; align-items: stretch; }
+  .meter { width: 100%; }
+  .variants figure { grid-template-columns: 72px minmax(0, 1fr); gap: 4px 14px; }
+  .mark-variant { width: 72px; height: 72px; }
+  .facts > div { grid-template-columns: 1fr; gap: 2px; }
+  .social .btn { flex: 1 1 calc(50% - 7px); justify-content: center; }
+
+  .stamp { transform: rotate(-4deg) scale(0.85); transform-origin: left center; margin-left: 8px; }
+  .shell-hero { gap: 20px; }
+  .cta-card .btn { width: 100%; justify-content: center; }
+  .article { padding: 18px 0; }
+
+  .mast-strip { font-size: 0.64rem; gap: 4px 12px; }
+  .filterbar { gap: 8px; }
+  .news-search, .news-sort { min-height: 44px; font-size: 16px; }
+  .story-lead .story-head { font-size: 2.3rem; }
+  .footer, .footer-page { padding-inline: 12px; }
+}
+@media (max-width: 380px) {
+  .wordmark { font-size: 14.5vw; }
+  .ticker-item { font-size: 1.8rem; }
+}
