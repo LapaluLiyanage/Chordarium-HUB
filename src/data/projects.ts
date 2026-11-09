@@ -59,7 +59,7 @@ export const PROJECTS: Project[] = [
 export const DOORS = [
   { n: '01', title: 'LEARN', desc: 'Notes, chords and rhythm, one small step at a time.', to: '/learn' },
   { n: '02', title: 'ARTICLES', desc: 'Short reads on how chords and songs fit together.', to: '/articles' },
-  { n: '03', title: 'MUSIC NEWS', desc: 'Headlines from the music world, country by country.', to: '/news' },
+  { n: '03', title: 'MUSIC NEWS', desc: 'Headlines from the music world, country by country.', to: '/news', live: true },
 ]
 
 export const WIRE = [

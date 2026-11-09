@@ -350,6 +350,8 @@ body { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; line-hei
 .door-title { font-size: clamp(2.2rem, 5vw, 4rem); }
 .door-pill { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
 .door:hover .door-pill { background: var(--ink); color: var(--cream); }
+.door-pill-live { background: var(--amber); border-color: var(--ink); }
+.door:hover .door-pill-live { background: var(--ink); }
 
 /* Wire: light strip between rules */
 .wire { background: transparent; color: var(--ink); border-radius: 0; padding: 0; margin-top: 80px; }
