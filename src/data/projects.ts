@@ -26,12 +26,12 @@ export const PROJECTS: Project[] = [
   {
     id: 'setsmith',
     title: 'SETSMITH',
-    eyebrow: 'FASTUNES',
-    status: 'WORKING',
+    eyebrow: 'FOR LIVE BANDS',
+    status: 'FINISHED',
     cta: 'OPEN SETSMITH',
     href: 'https://setsmith.lapalu.me',
-    blurb: 'Plan a live band setlist: split the night into sessions, add songs from YouTube, assign singers, see BPM and key, then send the band a PDF.',
-    tags: ['Setlists', 'BPM & key', 'PDF export'],
+    blurb: 'Plan a gig setlist: split the night into sessions, add songs from YouTube, assign singers, see BPM and key, run it from a Stage view, then send the band a PDF.',
+    tags: ['Stage view', 'BPM & key', 'PDF export', 'PWA · iOS · Android'],
   },
   {
     id: 'studio',

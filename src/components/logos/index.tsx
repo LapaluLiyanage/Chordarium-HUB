@@ -22,12 +22,18 @@ export const ChorderLogo = (p: P) => (
   </Svg>
 )
 
+/** The real Setsmith app icon (its favicon), scaled from a 32px grid to 100. */
 export const SetsmithLogo = (p: P) => (
   <Svg {...p}>
-    <path d={TILE} fill="var(--amber)" />
-    <path d="M26 30H64M26 50H56M26 70H48" stroke="var(--ink)" strokeWidth="9" strokeLinecap="round" />
-    <ellipse cx="70" cy="68" rx="9" ry="6.5" fill="var(--ink)" transform="rotate(-20 70 68)" />
-    <path d="M77 66V44q10 3 10 13" fill="none" stroke="var(--ink)" strokeWidth="5" strokeLinecap="round" />
+    <g transform="scale(3.125)">
+      <rect width="32" height="32" rx="7" fill="#1d1f22" />
+      <g fill="#e2f24a" transform="translate(3,3)">
+        <rect x="13" y="1" width="2" height="11" />
+        <ellipse cx="11.5" cy="11" rx="3.5" ry="3" />
+        <path d="M0 15h26l-4.2 6H4.2z" />
+        <rect x="8" y="21" width="10" height="5" />
+      </g>
+    </g>
   </Svg>
 )
 
