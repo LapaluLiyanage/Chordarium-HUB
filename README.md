@@ -12,6 +12,7 @@
 |---|---|
 | **Chordarium hub** | https://chordarium.lapalu.me |
 | **Chorder** (YouTube link or MP3 to synced chords) | https://chordariumchorder.lapalu.me |
+| **Setsmith** (setlist planner for live bands) | https://setsmith.lapalu.me ([source](https://github.com/LapaluLiyanage/setsmith)) |
 
 ## Screenshots
 
@@ -21,7 +22,7 @@
 
 ### The tools
 
-Chorder is working today. Studio and Songbooks are on the way.
+Chorder and Setsmith are working today. Studio and Songbooks are on the way.
 
 ![The tools: Chorder, Studio, Songbooks](docs/screenshots/tools.png)
 

@@ -22,6 +22,15 @@ export const ChorderLogo = (p: P) => (
   </Svg>
 )
 
+export const SetsmithLogo = (p: P) => (
+  <Svg {...p}>
+    <path d={TILE} fill="var(--amber)" />
+    <path d="M26 30H64M26 50H56M26 70H48" stroke="var(--ink)" strokeWidth="9" strokeLinecap="round" />
+    <ellipse cx="70" cy="68" rx="9" ry="6.5" fill="var(--ink)" transform="rotate(-20 70 68)" />
+    <path d="M77 66V44q10 3 10 13" fill="none" stroke="var(--ink)" strokeWidth="5" strokeLinecap="round" />
+  </Svg>
+)
+
 export const StudioLogo = (p: P) => (
   <Svg {...p}>
     <path d={TILE} fill="var(--ink)" />
@@ -55,4 +64,4 @@ export const CMark = ({ size = 70 }: P) => (
   </svg>
 )
 
-export const LOGOS = { chorder: ChorderLogo, studio: StudioLogo, songbooks: SongbookLogo }
+export const LOGOS = { chorder: ChorderLogo, setsmith: SetsmithLogo, studio: StudioLogo, songbooks: SongbookLogo }

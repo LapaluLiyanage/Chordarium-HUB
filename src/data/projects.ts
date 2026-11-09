@@ -1,5 +1,5 @@
 export interface Project {
-  id: 'chorder' | 'studio' | 'songbooks'
+  id: 'chorder' | 'setsmith' | 'studio' | 'songbooks'
   title: string
   eyebrow: string
   status: string
@@ -22,6 +22,16 @@ export const PROJECTS: Project[] = [
     blurb: "Paste a YouTube link or upload an MP3 and get the song's chords, synced to the music. Edit them, loop a verse, and print the sheet.",
     tags: ['YouTube / MP3 → chords', 'PDF · MIDI · ChordPro'],
     dark: true,
+  },
+  {
+    id: 'setsmith',
+    title: 'SETSMITH',
+    eyebrow: 'FASTUNES',
+    status: 'WORKING',
+    cta: 'OPEN SETSMITH',
+    href: 'https://setsmith.lapalu.me',
+    blurb: 'Plan a live band setlist: split the night into sessions, add songs from YouTube, assign singers, see BPM and key, then send the band a PDF.',
+    tags: ['Setlists', 'BPM & key', 'PDF export'],
   },
   {
     id: 'studio',

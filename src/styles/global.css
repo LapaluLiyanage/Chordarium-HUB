@@ -340,7 +340,7 @@ body { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; line-hei
 .card-status { display: inline-flex; align-items: center; gap: 6px; border-width: 1.5px; }
 .card-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .card-top { flex-direction: row-reverse; }
-.card-title { font-size: clamp(2.6rem, 4vw, 3.4rem); }
+.card-title { font-size: clamp(2.4rem, 2.7vw, 3.4rem); overflow-wrap: anywhere; }
 .card-dark .btn-cream { background: var(--amber); border-color: var(--amber); color: var(--ink); }
 .card .btn { margin-top: auto; }
 .tags li { border-width: 1px; }
