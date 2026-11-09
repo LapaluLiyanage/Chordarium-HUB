@@ -4,9 +4,3 @@ dist
 test-results
 playwright-report
 *.tsbuildinfo
-
-# AI assistant files (local only)
-.claude/
-.claude-plugin/
-CLAUDE.md
-CLAUDE.local.md

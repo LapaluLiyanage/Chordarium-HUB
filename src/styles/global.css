@@ -539,3 +539,15 @@ body { font-family: 'Archivo', system-ui, sans-serif; font-weight: 500; line-hei
   .wordmark { font-size: 14.5vw; }
   .ticker-item { font-size: 1.8rem; }
 }
+
+/* Articles: Wikipedia-backed cards */
+.art-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 32px 28px; margin-top: 8px; }
+.art-card { display: grid; gap: 10px; align-content: start; border-top: 3px solid var(--ink); padding-top: 14px; }
+.art-pic { border: 1.5px solid var(--ink); aspect-ratio: 3 / 2; overflow: hidden; background: var(--sand); }
+.art-pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.art-title { font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: 0.95; }
+.art-sum { font-family: 'Libre Baskerville', Georgia, serif; font-size: 0.92rem; }
+.art-link { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 0.72rem; letter-spacing: 0.12em; text-decoration: underline; text-underline-offset: 3px; width: fit-content; }
+.art-link:hover { color: var(--amber); }
+.footnote a { text-decoration: underline; }
+@media (max-width: 640px) { .art-grid { grid-template-columns: 1fr; } }

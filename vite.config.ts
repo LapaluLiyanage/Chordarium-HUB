@@ -24,9 +24,10 @@ const devArticlesApi = (): Plugin => ({
   configureServer(server) {
     server.middlewares.use('/api/articles', async (req, res) => {
       try {
-        const { ARTICLES, TOPICS, queryArticles } = await server.ssrLoadModule('/src/data/articles.ts')
+        const { TOPICS, queryArticles } = await server.ssrLoadModule('/src/data/articles.ts')
+        const { fetchArticles } = await server.ssrLoadModule('/src/lib/wikiServer.ts')
         const params = new URL((req as { url?: string }).url ?? '', 'http://localhost').searchParams
-        const articles = queryArticles(ARTICLES, { tag: params.get('tag') ?? undefined, q: params.get('q') ?? undefined })
+        const articles = queryArticles(await fetchArticles(), { tag: params.get('tag') ?? undefined, q: params.get('q') ?? undefined })
         res.setHeader('content-type', 'application/json')
         res.end(JSON.stringify({ articles, topics: TOPICS }))
       } catch {

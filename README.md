@@ -40,11 +40,13 @@ Headlines from the music world and from five countries, with images, search, sor
 
 ![Music News stories with images](docs/screenshots/news-stories.png)
 
-### Learn and Articles
+### Articles and Learn
 
-| Learn | Articles |
+![Articles from Wikipedia](docs/screenshots/articles-list.png)
+
+| Articles | Learn |
 |---|---|
-| ![Learn](docs/screenshots/learn.png) | ![Articles](docs/screenshots/articles.png) |
+| ![Articles](docs/screenshots/articles.png) | ![Learn](docs/screenshots/learn.png) |
 
 ### Mobile
 
@@ -59,8 +61,8 @@ The site is responsive down to small phones. The screenshots below are at 390 px
 - **Hero and dot fields**: three.js backdrops and a Tonnetz lattice where every triangle is a chord.
 - **Chordarium Ring**: a 3D ring of the twelve notes with chord chips, auto-play and Web Audio sound. It falls back to a flat SVG ring when WebGL is off.
 - **Music News**: `/api/news` is a serverless function that reads RSS feeds from Billboard, Stereogum, Pitchfork, The Guardian, NME, Rolling Stone and more, plus Google News searches for Sri Lanka, India, the UK, the USA and Japan. It shows only the last 7 days.
-- **Articles API**: `GET /api/articles` returns the article list and topics as JSON. Filter with `?tag=THEORY` or search titles with `?q=chords`. The Articles page loads from it and falls back to a built-in list.
-- **Learn** and **Articles**: sections in progress.
+- **Articles**: short reads on theory, guitar, Sinhala music, band life and ear training. `GET /api/articles` pulls each topic's summary, image and link from the Wikipedia REST API (cached for 6 hours). Filter with `?tag=THEORY` or search with `?q=chords`. The page falls back to the plain topic list if Wikipedia is unreachable.
+- **Learn**: in progress.
 - Smooth scrolling, grain texture, scroll reveals and reduced-motion support.
 
 ## Tech stack
@@ -118,6 +120,10 @@ Full licence texts are in each package's folder under `node_modules/` after `npm
 ### Fonts
 
 [Archivo](https://fonts.google.com/specimen/Archivo) and [Libre Baskerville](https://fonts.google.com/specimen/Libre+Baskerville) are loaded from Google Fonts and licensed under the SIL Open Font License 1.1.
+
+### Articles content
+
+Article summaries and images on the Articles page come from [Wikipedia](https://en.wikipedia.org) through its public REST API. They are **not** covered by the MIT licence. Wikipedia text is available under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) and images carry their own licences (see each image's page on Wikimedia Commons). Every card links to the full article, which lists its authors.
 
 ### News content
 
