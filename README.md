@@ -59,6 +59,7 @@ The site is responsive down to small phones. The screenshots below are at 390 px
 - **Hero and dot fields**: three.js backdrops and a Tonnetz lattice where every triangle is a chord.
 - **Chordarium Ring**: a 3D ring of the twelve notes with chord chips, auto-play and Web Audio sound. It falls back to a flat SVG ring when WebGL is off.
 - **Music News**: `/api/news` is a serverless function that reads RSS feeds from Billboard, Stereogum, Pitchfork, The Guardian, NME, Rolling Stone and more, plus Google News searches for Sri Lanka, India, the UK, the USA and Japan. It shows only the last 7 days.
+- **Articles API**: `GET /api/articles` returns the article list and topics as JSON. Filter with `?tag=THEORY` or search titles with `?q=chords`. The Articles page loads from it and falls back to a built-in list.
 - **Learn** and **Articles**: sections in progress.
 - Smooth scrolling, grain texture, scroll reveals and reduced-motion support.
 
@@ -87,6 +88,7 @@ npm run dev        # http://localhost:5173, /api/news is served in dev too
 
 ```
 api/news.ts          Vercel function behind /api/news
+api/articles.ts      Vercel function behind /api/articles
 src/pages/           Home, Learn, Articles, News
 src/components/      Ring, hero lattice, nav, news cards, backdrops
 src/data/            Projects, feeds, modules, articles
